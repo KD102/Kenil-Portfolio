@@ -12,10 +12,21 @@ class Tabs extends StatelessWidget {
     return SizedBox(
       height: 60.h,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(width: 20.w),
+          CommonText(text: 'Keneel Dhanani', fontFamily: "IB", fontSize: 40.sp),
           Spacer(),
-          TabBarView(),
-          GitAndLinkedinButton().paddingOnly(bottom: 25.h),
+          TabBarView().paddingOnly(top: 12.h),
+          // GitAndLinkedinButton(),
+          SizedBox(width: 20.w),
+          CommonButton(
+            onTap: () {},
+            height: 50.h,
+            width: 150.w,
+            fontSize: 18.sp,
+            title: 'Let’s talk',
+          ),
           SizedBox(width: 20.w),
         ],
       ),
@@ -26,13 +37,7 @@ class Tabs extends StatelessWidget {
 class TabBarView extends StatelessWidget {
   TabBarView({super.key});
 
-  final List<String> tabs = [
-    'Home',
-    'About',
-    'Tech Stack',
-    'Projects',
-    'Contact',
-  ];
+  final List<String> tabs = ['Home', 'About', 'Projects', 'Contact'];
 
   @override
   Widget build(BuildContext context) {
@@ -59,23 +64,20 @@ class TabBarView extends StatelessWidget {
                   duration: Duration(milliseconds: 300),
                   child: Column(
                     children: [
-                      Text(
-                        tabs[index],
-                        style: TextStyle(
-                          color:
-                              isHover.isTrue
-                                  ? ConstColor.darkContent
-                                  : ConstColor.darkContent.withValues(
-                                    alpha: 0.50,
-                                  ),
-                          fontSize: 14.sp,
-                        ),
-                      ).paddingSymmetric(horizontal: 20.w),
+                      CommonText(
+                        text: tabs[index],
+                        color:
+                            isHover.isTrue
+                                ? ConstColor.textColor
+                                : ConstColor.textColor.withValues(alpha: 0.50),
+                        fontFamily: "ISB",
+                        fontSize: 18.sp,
+                      ).paddingSymmetric(horizontal: 15.w),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         height: 5.h,
                         decoration: BoxDecoration(
-                          color: ConstColor.darkContent,
+                          color: ConstColor.textColor,
                           borderRadius: BorderRadius.all(Radius.circular(15.r)),
                         ),
                         width: isHover.value ? 40.w : 0,
@@ -92,12 +94,22 @@ class TabBarView extends StatelessWidget {
   }
 }
 
+class LetsTalk extends StatelessWidget {
+  const LetsTalk({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 class GitAndLinkedinButton extends StatelessWidget {
   const GitAndLinkedinButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CommonZoomAnimation(
           height: 30.h,
