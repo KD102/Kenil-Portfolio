@@ -37,7 +37,7 @@ class Tabs extends StatelessWidget {
 class TabBarView extends StatelessWidget {
   TabBarView({super.key});
 
-  final List<String> tabs = ['Home', 'About', 'Projects', 'Contact'];
+  final List<String> tabs = ['Home', 'About', 'Portfolio', 'Contact'];
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class TabBarView extends StatelessWidget {
                           color: ConstColor.textColor,
                           borderRadius: BorderRadius.all(Radius.circular(15.r)),
                         ),
-                        width: isHover.value ? 40.w : 0,
+                        width: isHover.value ? 55.w : 0,
                       ),
                     ],
                   ),
@@ -103,30 +103,4 @@ class LetsTalk extends StatelessWidget {
   }
 }
 
-class GitAndLinkedinButton extends StatelessWidget {
-  const GitAndLinkedinButton({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CommonZoomAnimation(
-          height: 30.h,
-          width: 30.h,
-          zoomHeight: 40.h,
-          zoomWidth: 40.h,
-          child: SvgView('assets/icons/github.svg'),
-        ),
-        SizedBox(width: 10.w),
-        CommonZoomAnimation(
-          height: 30.h,
-          width: 30.h,
-          zoomHeight: 40.h,
-          zoomWidth: 40.h,
-          child: SvgView('assets/icons/linkdin.svg'),
-        ),
-      ],
-    );
-  }
-}

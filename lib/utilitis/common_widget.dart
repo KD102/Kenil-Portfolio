@@ -181,7 +181,6 @@ class CommonButton extends StatelessWidget {
             height: height,
             width: isHover.isTrue ? width : 0,
             decoration: BoxDecoration(
-              border: Border.all(color: ConstColor.textColor),
               color:
                   isHover.isTrue
                       ? ConstColor.textColor
