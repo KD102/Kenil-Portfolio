@@ -35,13 +35,13 @@ class CommonText extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text(
       text,
       textAlign: textAlign ?? TextAlign.start,
       maxLines: maxLines,
       textScaler: const TextScaler.linear(1),
-      // overflow: overflow,
-      // softWrap: true,
+      overflow: overflow,
+      softWrap: true,
       style: TextStyle(
         overflow: overflow,
         fontSize: fontSize ?? 14.sp,

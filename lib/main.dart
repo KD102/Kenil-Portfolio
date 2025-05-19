@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:portfolio/ui/homepage.dart';
+import 'package:portfolio/ui/main_page.dart';
+import 'package:portfolio/utilitis/common_widget.dart';
 import 'package:portfolio/utilitis/constant.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -15,19 +17,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(1440, 1024),
-      minTextAdapt: true,
-      splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-           scaffoldBackgroundColor: ConstColor.backgroundColor,
+            scaffoldBackgroundColor: ConstColor.backgroundColor,
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
           home: child,
         );
       },
-      child: Homepage(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth >= 1366 && constraints.maxHeight >= 700) {
+              return MainPage(); // Desktop layout
+            } else {
+              return Scaffold(
+                body: Center(
+                  child: CommonText(
+                    text: 'This app is only available on desktop browsers.',
+                    fontSize: 18.sp,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+          },
+        ),
     );
   }
 }

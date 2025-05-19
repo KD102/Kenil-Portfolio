@@ -1,12 +1,17 @@
+
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:portfolio/ui/tabs.dart';
 import 'package:portfolio/utilitis/common_widget.dart';
 import 'package:portfolio/utilitis/constant.dart';
+
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
@@ -16,67 +21,66 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(top: 30.h, left: 0.0, right: 0.0, child: Tabs()),
-          Positioned(
-            top: 260.h,
-            left: 125.w,
-            child: Obx(() {
-              isSecondTextAnimate.value;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+    return Stack(
+      children: [
+        Positioned(top: 30.h, left: 0.0, right: 0.0, child: Tabs()),
+        Positioned(
+          top: 260.h,
+          left: 125.w,
+          child: Obx(() {
+            isSecondTextAnimate.value;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  onFinished: () {
+                    isSecondTextAnimate.value = true;
+                  },
+                  animatedTexts: [
+                    TyperAnimatedText(
+                      'Flutter\ndeveloper !',
+
+                      textStyle: TextStyle(
+                        color: ConstColor.textColor,
+                        fontFamily: "LB",
+                        fontSize: 50.sp,
+                      ),
+                    ),
+                  ],
+                  controller: typeController,
+                ),
+                SizedBox(height: 11.h),
+                if (isSecondTextAnimate.isTrue)
                   AnimatedTextKit(
                     isRepeatingAnimation: false,
-                    onFinished: () {
-                      isSecondTextAnimate.value = true;
-                    },
                     animatedTexts: [
                       TyperAnimatedText(
-                        'Flutter\ndeveloper !',
-
+                        'Hi, I’m Keneel. A passionate Flutter\nDeveloper based in India.',
                         textStyle: TextStyle(
                           color: ConstColor.textColor,
-                          fontFamily: "LB",
-                          fontSize: 50.sp,
+                          fontFamily: "IM",
+                          fontSize: 20.sp,
                         ),
                       ),
                     ],
                     controller: typeController,
                   ),
-                  SizedBox(height: 11.h),
-                  if (isSecondTextAnimate.isTrue)
-                    AnimatedTextKit(
-                      isRepeatingAnimation: false,
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          'Hi, I’m Keneel. A passionate Flutter\nDeveloper based in India.',
-                          textStyle: TextStyle(
-                            color: ConstColor.textColor,
-                            fontFamily: "IM",
-                            fontSize: 20.sp,
-                          ),
-                        ),
-                      ],
-                      controller: typeController,
-                    ),
-                  SizedBox(height: 20.h),
-                  GitAndLinkedinButton(),
-                ],
-              );
-            }),
-          ),
-          Positioned(top: 227.h, right: 181.w, child: FullScreenGlowBox()),
-          Positioned(
-            top: 750.h,
-            right: 0.0,
-            left: 0.0,
-            child: Center(child: TechTools()),
-          ),
-        ],
-      ),
+                SizedBox(height: 20.h),
+                GitAndLinkedinButton(),
+              ],
+            );
+          }),
+        ),
+        Positioned(top: 227.h, right: 181.w, child: FullScreenGlowBox()),
+        Positioned(
+          top: 750.h,
+          right: 0.0,
+          left: 0.0,
+          child: Center(child: TechTools()),
+        ),
+
+      ],
     );
   }
 }
@@ -119,10 +123,8 @@ class FullScreenGlowBox extends StatelessWidget {
   FullScreenGlowBox({super.key});
 
   final GlobalKey _boxKey = GlobalKey();
-
-  final RxString _glowSide = ''.obs;
-
-  final double boxSize = 400.h;
+  final RxInt _glowSegment = RxInt(-1); // 0 to 15
+  final double boxSize = 400.0;
 
   void _updateGlowSide(PointerHoverEvent event) {
     final boxContext = _boxKey.currentContext;
@@ -135,22 +137,42 @@ class FullScreenGlowBox extends StatelessWidget {
     final dx = event.position.dx - boxCenter.dx;
     final dy = event.position.dy - boxCenter.dy;
 
-    final absDx = dx.abs();
-    final absDy = dy.abs();
+    final angle = (atan2(dy, dx) * 180 / pi + 360) % 360;
+    final segment = ((angle + 11.25) ~/ 22.5) % 16; // 16 segments
 
-    String side;
-    if (absDx > absDy) {
-      side = dx > 0 ? 'right' : 'left';
-    } else {
-      side = dy > 0 ? 'bottom' : 'top';
-    }
+    _glowSegment.value = segment;
+  }
 
-    _glowSide.value = side;
+  Offset _getShadowOffset(int segment) {
+    // Simple directional offset mapping (adjusted for aesthetics)
+    const offsets = [
+      Offset(0, -6),    // N
+      Offset(2, -5),    // NNE
+      Offset(4, -4),    // NE
+      Offset(5, -2),    // ENE
+      Offset(6, 0),     // E
+      Offset(5, 2),     // ESE
+      Offset(4, 4),     // SE
+      Offset(2, 5),     // SSE
+      Offset(0, 6),     // S
+      Offset(-2, 5),    // SSW
+      Offset(-4, 4),    // SW
+      Offset(-5, 2),    // WSW
+      Offset(-6, 0),    // W
+      Offset(-5, -2),   // WNW
+      Offset(-4, -4),   // NW
+      Offset(-2, -5),   // NNW
+    ];
+    return offsets[segment];
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      Offset glowOffset = _glowSegment.value >= 0
+          ? _getShadowOffset(_glowSegment.value)
+          : Offset.zero;
+
       return MouseRegion(
         onHover: _updateGlowSide,
         child: Center(
@@ -160,35 +182,18 @@ class FullScreenGlowBox extends StatelessWidget {
             width: boxSize,
             height: boxSize,
             decoration: BoxDecoration(
-              color: ConstColor.backgroundColor,
-              image: DecorationImage(
+              color: Colors.black,
+              image: const DecorationImage(
                 image: AssetImage("assets/icons/profile_image.png"),
+                fit: BoxFit.cover,
               ),
-              border: Border.all(color: ConstColor.textColor),
-              borderRadius: BorderRadius.circular(200.r),
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(200),
               boxShadow: [
-                if (_glowSide.value == 'top')
-                  const BoxShadow(
+                if (_glowSegment.value >= 0)
+                  BoxShadow(
                     color: Colors.white,
-                    offset: Offset(0, -6),
-                    blurRadius: 12,
-                  ),
-                if (_glowSide.value == 'bottom')
-                  const BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(0, 6),
-                    blurRadius: 12,
-                  ),
-                if (_glowSide.value == 'left')
-                  const BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(-6, 0),
-                    blurRadius: 12,
-                  ),
-                if (_glowSide.value == 'right')
-                  const BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(6, 0),
+                    offset: glowOffset,
                     blurRadius: 12,
                   ),
               ],
@@ -199,6 +204,7 @@ class FullScreenGlowBox extends StatelessWidget {
     });
   }
 }
+
 
 class TechTools extends StatelessWidget {
   TechTools({super.key});

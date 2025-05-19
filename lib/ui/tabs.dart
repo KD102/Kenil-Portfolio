@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:portfolio/utilitis/common_widget.dart';
 import 'package:portfolio/utilitis/constant.dart';
 
+import '../contrller.dart';
+
 class Tabs extends StatelessWidget {
   const Tabs({super.key});
 
@@ -38,6 +40,7 @@ class TabBarView extends StatelessWidget {
   TabBarView({super.key});
 
   final List<String> tabs = ['Home', 'About', 'Portfolio', 'Contact'];
+  final ScrollPageController controller = Get.find<ScrollPageController>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +54,17 @@ class TabBarView extends StatelessWidget {
           final RxBool isHover = false.obs;
           return Obx(() {
             isHover.value;
-            return MouseRegion(
-              onEnter: (event) {
-                isHover.value = true;
+            return GestureDetector(
+              onTap: (){
+                controller.scrollToPage(index);
               },
-              onExit: (event) {
-                isHover.value = false;
-              },
-              child: GestureDetector(
-                onTap: () {},
+              child: MouseRegion(
+                onEnter: (event) {
+                  isHover.value = true;
+                },
+                onExit: (event) {
+                  isHover.value = false;
+                },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   child: Column(
@@ -94,6 +99,9 @@ class TabBarView extends StatelessWidget {
   }
 }
 
+
+
+
 class LetsTalk extends StatelessWidget {
   const LetsTalk({super.key});
 
@@ -102,5 +110,3 @@ class LetsTalk extends StatelessWidget {
     return const Placeholder();
   }
 }
-
-
