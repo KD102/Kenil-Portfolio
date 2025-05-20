@@ -13,11 +13,12 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: PageScrollPhysics(),
         controller: controller.scrollController,
         child: Column(
-          children: List.generate(4, (index) => SizedBox(
+          children: List.generate(controller.pages.length, (index) => SizedBox(
             height: 1024,
-            child: Homepage(),
+            child:controller.pages[index],
           )),
         ),
       ),

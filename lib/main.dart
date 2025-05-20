@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth >= 1366 && constraints.maxHeight >= 700) {
-              return MainPage(); // Desktop layout
+              return MainPage();
             } else {
               return Scaffold(
                 body: Center(

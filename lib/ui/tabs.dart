@@ -17,7 +17,7 @@ class Tabs extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(width: 20.w),
-          CommonText(text: 'Keneel Dhanani', fontFamily: "IB", fontSize: 40.sp),
+          CommonText(text: 'Kenil Dhanani', fontFamily: "IB", fontSize: 40.sp),
           Spacer(),
           TabBarView().paddingOnly(top: 12.h),
           // GitAndLinkedinButton(),

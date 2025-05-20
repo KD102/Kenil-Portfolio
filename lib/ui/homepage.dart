@@ -56,7 +56,7 @@ class Homepage extends StatelessWidget {
                     isRepeatingAnimation: false,
                     animatedTexts: [
                       TyperAnimatedText(
-                        'Hi, I’m Keneel. A passionate Flutter\nDeveloper based in India.',
+                        'Hi, I’m Kenil. A passionate Flutter\nDeveloper based in India.',
                         textStyle: TextStyle(
                           color: ConstColor.textColor,
                           fontFamily: "IM",
