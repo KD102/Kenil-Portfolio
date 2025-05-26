@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:portfolio/ui/homepage.dart';
 
 import '../contrller.dart';
 
@@ -13,7 +12,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        physics: PageScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         controller: controller.scrollController,
         child: Column(
           children: List.generate(controller.pages.length, (index) => SizedBox(

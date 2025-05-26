@@ -79,7 +79,6 @@ class Homepage extends StatelessWidget {
           left: 0.0,
           child: Center(child: TechTools()),
         ),
-
       ],
     );
   }
@@ -187,12 +186,12 @@ class FullScreenGlowBox extends StatelessWidget {
                 image: AssetImage("assets/icons/profile_image.png"),
                 fit: BoxFit.cover,
               ),
-              border: Border.all(color: Colors.white),
+              border: Border.all(color: ConstColor.textColor),
               borderRadius: BorderRadius.circular(200),
               boxShadow: [
                 if (_glowSegment.value >= 0)
                   BoxShadow(
-                    color: Colors.white,
+                    color: ConstColor.textColor,
                     offset: glowOffset,
                     blurRadius: 12,
                   ),

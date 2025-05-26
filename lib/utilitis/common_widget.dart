@@ -220,3 +220,86 @@ class CommonButton extends StatelessWidget {
     });
   }
 }
+
+class AnimatedScaledText extends StatefulWidget {
+  final String text;
+  final TextStyle? style;
+  final Duration duration;
+  final double minScale;
+  final int maxLine;
+  final double maxScale;
+  final bool isZoomed; // New property to control the zoom state
+
+  const AnimatedScaledText({
+    super.key,
+    required this.text,
+    this.style,
+    this.duration = const Duration(milliseconds: 500),
+    this.minScale = 1.0,
+    this.maxLine = 3,
+    this.maxScale = 1.5,
+    this.isZoomed = false, // Default to not zoomed
+  });
+
+  @override
+  State<AnimatedScaledText> createState() => _AnimatedScaledTextState();
+}
+
+class _AnimatedScaledTextState extends State<AnimatedScaledText>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+
+    _scaleAnimation = Tween<double>(
+      begin: widget.minScale,
+      end: widget.maxScale,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // Initialize the animation state based on isZoomed
+    if (widget.isZoomed) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedScaledText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Listen for changes in the isZoomed property
+    if (widget.isZoomed != oldWidget.isZoomed) {
+      if (widget.isZoomed) {
+        _controller.forward(); // Zoom in
+      } else {
+        _controller.reverse(); // Zoom out
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _scaleAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Text(
+            overflow: TextOverflow.ellipsis,
+            maxLines: widget.maxLine,
+            widget.text,
+            style: widget.style,
+          ),
+        );
+      },
+    );
+  }
+}

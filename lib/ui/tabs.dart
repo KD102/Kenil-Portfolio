@@ -20,7 +20,6 @@ class Tabs extends StatelessWidget {
           CommonText(text: 'Kenil Dhanani', fontFamily: "IB", fontSize: 40.sp),
           Spacer(),
           TabBarView().paddingOnly(top: 12.h),
-          // GitAndLinkedinButton(),
           SizedBox(width: 20.w),
           CommonButton(
             onTap: () {},
@@ -39,7 +38,7 @@ class Tabs extends StatelessWidget {
 class TabBarView extends StatelessWidget {
   TabBarView({super.key});
 
-  final List<String> tabs = ['Home', 'About', 'Portfolio', 'Contact'];
+  final List<String> tabs = ['Home', 'About', 'Portfolio'];
   final ScrollPageController controller = Get.find<ScrollPageController>();
 
   @override
@@ -77,7 +76,7 @@ class TabBarView extends StatelessWidget {
                                 : ConstColor.textColor.withValues(alpha: 0.50),
                         fontFamily: "ISB",
                         fontSize: 18.sp,
-                      ).paddingSymmetric(horizontal: 15.w),
+                      ).paddingSymmetric(horizontal: 20.w),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         height: 5.h,
